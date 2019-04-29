@@ -36,24 +36,25 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Mountain> mountainArrayList=new ArrayList<>();
+    private ArrayAdapter<Mountain> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         new FetchData().execute();
 
-          ArrayAdapter<Mountain> adapter = new ArrayAdapter<Mountain>(this ,R.layout.activity_main,
-            R.id.my_item_textview, mountainArrayList);
+        adapter = new ArrayAdapter<Mountain>(this ,R.layout.activity_main,
+                R.id.my_item_textview, mountainArrayList);
 
-    ListView myListView = (ListView)findViewById(R.id.mountainListView);
+        ListView myListView = (ListView)findViewById(R.id.mountainListView);
         myListView.setAdapter(adapter);
 
 
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Toast.makeText(getApplicationContext(),mountainArrayList.get(position).info(), Toast.LENGTH_SHORT).show();
-        }
-    });
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(),mountainArrayList.get(position).info(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private class FetchData extends AsyncTask<Void,Void,String>{
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             // Implement a parsing code that loops through the entire JSON and creates objects
             // of our newly created Mountain class.
             try {
-            // Ditt JSON-objekt som Java
+                // Ditt JSON-objekt som Java
                 JSONArray json1 = new JSONArray(o);
                 for (int i = 0; i<=json1.length(); i++){
                     mountainArrayList.add(new Mountain(json1.getJSONObject(i).getString("name"), json1.getJSONObject(i).getString("location"), json1.getJSONObject(i).getInt("size")));
@@ -143,4 +144,3 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-
