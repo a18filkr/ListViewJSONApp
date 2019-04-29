@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 
 // Create a new class, Mountain, that can hold your JSON data
@@ -26,6 +27,7 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ArrayList<Mountain> mountainArrayList=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
