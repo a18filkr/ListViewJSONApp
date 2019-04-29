@@ -4,6 +4,14 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,6 +40,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        new FetchData().execute();
+
+          ArrayAdapter<Mountain> adapter = new ArrayAdapter<Mountain>(this ,R.layout.activity_main,
+            R.id.my_item_textview, mountainArrayList);
+
+    ListView myListView = (ListView)findViewById(R.id.mountainListView);
+        myListView.setAdapter(adapter);
+
+
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Toast.makeText(getApplicationContext(),mountainArrayList.get(position).info(), Toast.LENGTH_SHORT).show();
+        }
+    });
     }
 
     private class FetchData extends AsyncTask<Void,Void,String>{
@@ -47,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 // Construct the URL for the Internet service
-                URL url = new URL("_ENTER_THE_URL_TO_THE_PHP_SERVICE_SERVING_JSON_HERE_");
+                URL url = new URL("http://wwwlab.iit.his.se/brom/kurser/mobilprog/dbservice/admin/getdataasjson.php?type=brom");
 
                 // Create the request to the PHP-service, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -98,11 +120,26 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String o) {
             super.onPostExecute(o);
+            Log.d("filkr", o);
             // This code executes after we have received our data. The String object o holds
             // the un-parsed JSON string or is null if we had an IOException during the fetch.
 
             // Implement a parsing code that loops through the entire JSON and creates objects
             // of our newly created Mountain class.
+            try {
+            // Ditt JSON-objekt som Java
+                JSONArray json1 = new JSONArray(o);
+                for (int i = 0; i<=json1.length(); i++){
+                    mountainArrayList.add(new Mountain(json1.getJSONObject(i).getString("name"), json1.getJSONObject(i).getString("location"), json1.getJSONObject(i).getInt("size")));
+                    Log.d("filkr", json1.getJSONObject(i).getString("name"));
+                    Log.d("filkr", json1.getJSONObject(i).getString("location"));
+                    Log.d("filkr", json1.getJSONObject(i).getString("size"));
+                }
+
+
+            } catch (JSONException e) {
+                Log.e("brom","E:"+e.getMessage());
+            }
         }
     }
 }
