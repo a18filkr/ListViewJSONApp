@@ -4,6 +4,9 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -130,17 +133,50 @@ public class MainActivity extends AppCompatActivity {
             try {
                 // Ditt JSON-objekt som Java
                 JSONArray json1 = new JSONArray(o);
-                for (int i = 0; i<=json1.length(); i++){
-                    mountainArrayList.add(new Mountain(json1.getJSONObject(i).getString("name"), json1.getJSONObject(i).getString("location"), json1.getJSONObject(i).getInt("size")));
+                for (int i = 0; i<json1.length(); i++){
+                    adapter.add(new Mountain(json1.getJSONObject(i).getString("name"), json1.getJSONObject(i).getString("location"), json1.getJSONObject(i).getInt("size")));
                     Log.d("filkr", json1.getJSONObject(i).getString("name"));
                     Log.d("filkr", json1.getJSONObject(i).getString("location"));
                     Log.d("filkr", json1.getJSONObject(i).getString("size"));
                 }
 
-
             } catch (JSONException e) {
                 Log.e("brom","E:"+e.getMessage());
             }
         }
+
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.example_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.item1:
+                adapter.clear();
+                new FetchData().execute();
+                Toast.makeText(this, "Item 1 selected", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.item2:
+                Toast.makeText(this, "Item 2 selected", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.item3:
+                Toast.makeText(this, "Item 3 selected", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.subitem1:
+                Toast.makeText(this, "Sub item 1 selected", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.subitem2:
+                Toast.makeText(this, "Sub item 2 selected", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
 }
