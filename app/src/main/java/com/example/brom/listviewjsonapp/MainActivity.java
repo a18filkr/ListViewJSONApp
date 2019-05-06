@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 // Create a new class, Mountain, that can hold your JSON data
@@ -37,6 +38,8 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private final LinkedList<String> mWordList = new LinkedList<>();
 
     private ArrayList<Mountain> mountainArrayList=new ArrayList<>();
     private ArrayAdapter<Mountain> adapter;
@@ -58,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),mountainArrayList.get(position).info(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        for(int i=0; i<20; i++){
+            mWordList.addLast("Word " + i);
+        }
     }
 
     private class FetchData extends AsyncTask<Void,Void,String>{
