@@ -1,5 +1,6 @@
 package com.example.brom.listviewjsonapp;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,17 +41,16 @@ import java.util.LinkedList;
 public class MainActivity extends AppCompatActivity {
 
     private final LinkedList<String> mWordList = new LinkedList<>();
-
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private ArrayList<Mountain> mountainArrayList=new ArrayList<>();
-    private ArrayAdapter<Mountain> adapter;
+    private MountainListAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         new FetchData().execute();
 
-        adapter = new ArrayAdapter<Mountain>(this ,R.layout.activity_main,
-                R.id.my_item_textview, mountainArrayList);
+        adapter = new MountainListAdapter(this , mountainArrayList);
 
         ListView myListView = (ListView)findViewById(R.id.mountainListView);
         myListView.setAdapter(adapter);
@@ -58,13 +58,17 @@ public class MainActivity extends AppCompatActivity {
 
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(),mountainArrayList.get(position).info(), Toast.LENGTH_SHORT).show();
+                //launchSecondActivity();
+                Toast.makeText(getApplicationContext(), "Hej", Toast.LENGTH_SHORT).show();
             }
         });
 
-        for(int i=0; i<20; i++){
-            mWordList.addLast("Word " + i);
-        }
+
+    }
+
+    private void launchSecondActivity() {
+        Intent intent = new Intent(this, MountainDetailActivity.class);
+        startActivity(intent);
     }
 
     private class FetchData extends AsyncTask<Void,Void,String>{

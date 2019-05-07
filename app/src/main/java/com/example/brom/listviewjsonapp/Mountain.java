@@ -47,4 +47,6 @@ public class Mountain {
     public String getName(){
         return name;
     }
+    public String getLocation() {return location;}
+    public int getHeight() {return height;}
 }
